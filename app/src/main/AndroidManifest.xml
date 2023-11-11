@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_noivern_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoibotRemix"
-        tools:targetApi="31">
+        tools:targetApi="33"
+        >
+
         <activity
             android:name=".Player">
 
@@ -34,7 +36,17 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <service
+            android:name=".PlayerService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService"/>
+            </intent-filter>
+        </service>
+
     </application>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 </manifest>

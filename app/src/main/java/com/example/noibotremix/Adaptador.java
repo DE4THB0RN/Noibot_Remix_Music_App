@@ -38,18 +38,29 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
 
        if (Boomburst.atual == position){
            holder.nomes.setTextColor(Color.parseColor("#b03b26"));
+           holder.icon.setImageResource(R.drawable.noibat_shiny);
        }
        else
        {
+           holder.icon.setImageResource(R.drawable.noibat_a);
            holder.nomes.setTextColor(Color.parseColor("#ffffff"));
        }
 
        holder.itemView.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Boomburst.getround().reset();
-               Boomburst.atual= position;
+
                Intent intent = new Intent(context,Player.class);
+               if(Boomburst.atual != position)
+               {
+                   Boomburst.player_criado = true;
+                    Boomburst.atual= position;
+                    intent.putExtra("VALOR",0);
+               }
+               else
+               {
+                    intent.putExtra("VALOR",1);
+               }
                intent.putExtra("LISTA",songlist);
                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                context.startActivity(intent);
