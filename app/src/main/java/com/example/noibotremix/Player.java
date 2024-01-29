@@ -61,7 +61,7 @@ public class Player extends AppCompatActivity {
 
         titulo.setSelected(true);
 
-        songslist = (ArrayList<AudioModel>) getIntent().getSerializableExtra("LISTA");
+        /*songslist = (ArrayList<AudioModel>) getIntent().getSerializableExtra("LISTA");
         valor = (int) getIntent().getSerializableExtra("VALOR");
 
         for (AudioModel a : songslist)
@@ -109,12 +109,12 @@ public class Player extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
-        });
+        });*/
     }
 
-    @Override
-    public void onStart()
-    {
+    /*@Override
+    public void onStart() {
+        super.onStart();
         SessionToken sessionToken =
                 new SessionToken(this, new ComponentName(this, PlayerService.class));
         ListenableFuture<MediaController> controllerFuture =
@@ -126,10 +126,10 @@ public class Player extends AppCompatActivity {
             playerView.setPlayer(controllerFuture.get());
         }, MoreExecutors.directExecutor());
 
-    }
+    }*/
 
 
-    void Recursosmusicais(){
+    /*void Recursosmusicais(){
          musica_atual = songslist.get(Boomburst.atual);
          media_atual = mediaitems.get(Boomburst.atual);
          titulo.setText(musica_atual.getNome());
@@ -208,5 +208,5 @@ public class Player extends AppCompatActivity {
 
         // return timer string
         return finalTimerString;
-    }
+    }*/
 }

@@ -8,6 +8,7 @@ import androidx.media3.session.MediaSession;
 import androidx.media3.session.MediaSessionService;
 
 public class PlayerService extends MediaSessionService {
+
     private MediaSession mediaSession;
 
 
@@ -16,9 +17,10 @@ public class PlayerService extends MediaSessionService {
     public void onCreate()
     {
         super.onCreate();
-        ExoPlayer exoplay = new ExoPlayer.Builder(this).build();
+        ExoPlayer exoplay = new ExoPlayer.Builder(this)
+                .setHandleAudioBecomingNoisy(true)
+                .build();
         mediaSession = new MediaSession.Builder(this, exoplay).build();
-
 
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()

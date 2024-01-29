@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -50,17 +49,21 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
            @Override
            public void onClick(View v) {
 
-               Intent intent = new Intent(context,Player.class);
+               Intent intent = new Intent(context, Player_x.class);
+
                if(Boomburst.atual != position)
                {
                    Boomburst.player_criado = true;
                     Boomburst.atual= position;
                     intent.putExtra("VALOR",0);
+
                }
                else
                {
                     intent.putExtra("VALOR",1);
+
                }
+
                intent.putExtra("LISTA",songlist);
                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                context.startActivity(intent);
