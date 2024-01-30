@@ -35,20 +35,18 @@ public class Player_x extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
+        //Session token abre a sessão do player
         SessionToken sessionToken =
                 new SessionToken(this, new ComponentName(this, PlayerService.class));
         ListenableFuture<MediaController> controllerFuture =
                 new MediaController.Builder(this, sessionToken).buildAsync();
         controllerFuture.addListener(() -> {
-            // Call controllerFuture.get() to retrieve the MediaController.
-            // MediaController implements the Player interface, so it can be
-            // attached to the PlayerView UI component.
+            // Controller serve literalmente pra isso
+            //Ele controla a música
             try {
                 playerView.setPlayer(controllerFuture.get());
                 playerView.getPlayer().addMediaItems(pegarMusicas());
-                playerView.getPlayer().seekTo(Boomburst.atual,0);
-                playerView.getPlayer().prepare();
-                playerView.getPlayer().setPlayWhenReady(true);
+                musiquinha();
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -57,6 +55,14 @@ public class Player_x extends AppCompatActivity
         }, MoreExecutors.directExecutor());
     }
 
+    private void musiquinha()
+    {
+        if(valor != 1) {
+            playerView.getPlayer().seekTo(Boomburst.atual,0);
+            playerView.getPlayer().prepare();
+            playerView.getPlayer().setPlayWhenReady(true);
+        }
+    }
 
     //Pega todas as músicas da lista que foi jogada aqui
     //Não sei se vai funcionar 100% sabe
