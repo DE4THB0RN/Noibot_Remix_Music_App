@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,16 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_noivern_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoibotRemix"
+
         tools:targetApi="33"
         >
 
         <activity
-            android:name=".Player_x">
+            android:name=".Player_x"
+            android:banner="@id/none"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:banner="@id/none"
+            android:screenOrientation="portrait"
             >
 
             <intent-filter>
@@ -44,6 +48,7 @@
                 <action android:name="androidx.media3.session.MediaSessionService"/>
             </intent-filter>
         </service>
+
 
     </application>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />

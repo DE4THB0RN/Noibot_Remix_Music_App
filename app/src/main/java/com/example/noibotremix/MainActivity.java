@@ -3,12 +3,15 @@ package com.example.noibotremix;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.browse.MediaBrowser;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -19,6 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 //Principal:tomar cuidado ao mexer
 public class MainActivity extends AppCompatActivity {
@@ -42,23 +46,19 @@ public class MainActivity extends AppCompatActivity {
         String[] info = {
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.DURATION
         };
         String selecionar = MediaStore.Audio.Media.IS_MUSIC +" != 0 AND "
-                + MediaStore.Audio.Media.DURATION + " > 0 AND "
                 + MediaStore.Audio.Media.DATA + " LIKE '%/Music/%'";
-
+        AudioModel dados;
         Cursor cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,info,selecionar,null,null);
-        while (cursor.moveToNext()){
-            AudioModel dados = new AudioModel(cursor.getString(1),cursor.getString(0),cursor.getString(2));
-            if (new File(dados.getPath()).exists())
-            {
-                listinha.add(dados);
+        while (cursor != null && cursor.moveToNext()){
+            dados = new AudioModel(cursor.getString(1),cursor.getString(0));
 
-            }
+            listinha.add(dados);
+
         }
 
-
+        if(cursor != null) cursor.close();
 
         //se não tem nada
         if (listinha.size()==0){

@@ -13,6 +13,11 @@ public class AudioModel implements Serializable {
         this.duração = duração;
     }
 
+    public AudioModel(String path,String nome){
+        this.path = path;
+        this.nome = nome;
+    }
+
     public String getPath() {
         return path;
     }

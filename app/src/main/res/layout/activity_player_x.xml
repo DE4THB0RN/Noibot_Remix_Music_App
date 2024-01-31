@@ -7,10 +7,37 @@
     tools:context=".Player_x">
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nome da musica"
+        android:singleLine="true"
+        android:id="@+id/titulo_musica"
+        android:ellipsize="marquee"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:layout_margin="20dp"
+        android:padding="20dp"
+        android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:id="@+id/fotinha"
+        android:layout_below="@id/titulo_musica"
+        android:src="@drawable/noivern_smallo"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        />
+
+
     <androidx.media3.ui.PlayerView
+        android:layout_marginTop="150dp"
+        android:paddingHorizontal="18dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/fotinha"
         android:id="@+id/player_exo"
         />
 

@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.media3.common.MediaItem;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
 
@@ -23,6 +25,7 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
         this.songlist = songlist;
         this.context = context;
     }
+
     //faz uma lista pra valer com o numero de musicas
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,7 +56,6 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
 
                if(Boomburst.atual != position)
                {
-                   Boomburst.player_criado = true;
                     Boomburst.atual= position;
                     intent.putExtra("VALOR",0);
 
