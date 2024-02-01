@@ -26,8 +26,8 @@ import java.util.concurrent.ExecutionException;
 
 public class Player_x extends AppCompatActivity
 {
-    PlayerView playerView;
 
+    PlayerView playerView;
     ListenableFuture<MediaController> controllerFuture;
     ArrayList<AudioModel> songslist;
     int valor;
@@ -46,6 +46,7 @@ public class Player_x extends AppCompatActivity
         titulo = findViewById(R.id.titulo_musica);
         songslist = (ArrayList<AudioModel>) getIntent().getSerializableExtra("LISTA");
         valor = (int) getIntent().getSerializableExtra("VALOR");
+
     }
 
     @Override
@@ -90,6 +91,12 @@ public class Player_x extends AppCompatActivity
             playerView.getPlayer().setPlayWhenReady(true);
         }
         titulo.setText(Objects.requireNonNull(playerView.getPlayer().getCurrentMediaItem()).mediaMetadata.title);
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
     }
 
     //Pega todas as músicas da lista que foi jogada aqui
