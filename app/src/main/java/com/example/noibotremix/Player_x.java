@@ -3,7 +3,10 @@ package com.example.noibotremix;
 import static android.graphics.Color.rgb;
 
 import android.content.ComponentName;
+import android.graphics.Bitmap;
 import android.graphics.ColorSpace;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -13,12 +16,14 @@ import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
+import androidx.media3.ui.PlayerControlView;
 import androidx.media3.ui.PlayerNotificationManager;
 import androidx.media3.ui.PlayerView;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,9 +44,12 @@ public class Player_x extends AppCompatActivity
         //Aqui está setando o layout E o player(em tese)
         setContentView(R.layout.activity_player_x);
         playerView = findViewById(R.id.player_exo);
-
+        playerView.setShowNextButton(true);
+        playerView.setShowPreviousButton(true);
+        playerView.setBackgroundColor(getResources().getColor(R.color.black));
         playerView.setShowRewindButton(false);
         playerView.setShowFastForwardButton(false);
+        playerView.setArtworkDisplayMode(PlayerView.ARTWORK_DISPLAY_MODE_OFF);
         playerView.setShowShuffleButton(true);
         titulo = findViewById(R.id.titulo_musica);
         songslist = (ArrayList<AudioModel>) getIntent().getSerializableExtra("LISTA");
@@ -119,6 +127,11 @@ public class Player_x extends AppCompatActivity
         List<MediaItem> mediaitems = new ArrayList<>();
         MediaItem novo;
         int id = 0;
+        Drawable d = getDrawable(R.drawable.noivern_icon);
+        Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] bitmapdata = stream.toByteArray();
         for (AudioModel a : songslist)
         {
             novo = new MediaItem.Builder()
@@ -126,6 +139,7 @@ public class Player_x extends AppCompatActivity
                     .setMediaId("id_"+id)
                     .setMediaMetadata(new MediaMetadata.Builder()
                             .setTitle(a.getNome())
+                            .setArtworkData(bitmapdata,MediaMetadata.PICTURE_TYPE_ILLUSTRATION)
                             .build())
                     .build();
             mediaitems.add(novo);
@@ -134,5 +148,7 @@ public class Player_x extends AppCompatActivity
 
         return mediaitems;
     }
+
+
 
 }

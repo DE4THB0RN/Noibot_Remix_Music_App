@@ -2,12 +2,13 @@ package com.example.noibotremix;
 
 import static android.graphics.Color.rgb;
 
-import static androidx.media3.common.util.NotificationUtil.IMPORTANCE_HIGH;
+
 import static androidx.media3.ui.PlayerNotificationManager.ACTION_NEXT;
 import static androidx.media3.ui.PlayerNotificationManager.ACTION_PAUSE;
 import static androidx.media3.ui.PlayerNotificationManager.ACTION_PLAY;
 import static androidx.media3.ui.PlayerNotificationManager.ACTION_PREVIOUS;
 import static androidx.media3.ui.PlayerNotificationManager.ACTION_STOP;
+
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -15,10 +16,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
+
 
 
 import androidx.annotation.Nullable;
@@ -39,18 +40,20 @@ import com.google.common.collect.ImmutableList;
 
 public class PlayerService extends MediaSessionService {
 
-
+    //Definição dos PendingIntents que serão utilizados para notificações
     private PendingIntent pendingPlayIntent;
     private PendingIntent pendingPauseIntent;
     private PendingIntent pendingNextIntent;
     private PendingIntent pendingPreviousIntent;
     private PendingIntent pendingDeleteIntent;
+
+    //Definição da MediaSession,Player e NotificationCompat.Builder
     private MediaSession mediaSession;
     private ExoPlayer exoplay;
-
-    //private PlayerNotificationManager playerNotif;
-
     private NotificationCompat.Builder asuka;
+    NotificationManager notificationManager = null;
+
+    //Definição das constantes
     final String channelId = R.string.app_name + " Music Channel";
     final int notifId = 1111112;
     @Override
@@ -91,36 +94,6 @@ public class PlayerService extends MediaSessionService {
 
         });
 
-       /* playerNotif = new PlayerNotificationManager.Builder(this, notifId, channelId)
-                .setChannelImportance(IMPORTANCE_HIGH)
-                .setNotificationListener(notifListener)
-                .setSmallIconResourceId(R.drawable.ic_noivern_notif)
-                .setChannelDescriptionResourceId(R.string.app_name)
-                .setChannelNameResourceId(R.string.app_name)
-                .build();
-
-        playerNotif.setPlayer(exoplay);
-        playerNotif.setPriority(NotificationCompat.PRIORITY_MAX);
-        playerNotif.setUseNextActionInCompactView(true);
-        playerNotif.setUsePreviousActionInCompactView(true);
-        playerNotif.setUsePlayPauseActions(true);
-        playerNotif.setUseRewindAction(false);
-        playerNotif.setUseFastForwardAction(false);
-        playerNotif.setUseStopAction(false);
-        playerNotif.setUseChronometer(false);
-        playerNotif.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        playerNotif.setColor(rgb(0, 0, 0));
-        playerNotif.setColorized(true);*/
-
-
-        exoplay.addListener(new Player.Listener() {
-            @Override
-            public void onEvents(Player player, Player.Events events) {
-                if (events.contains(Player.EVENT_IS_PLAYING_CHANGED)) updateNotificationPlaybackState();
-                Player.Listener.super.onEvents(player, events);
-            }
-        });
-
     }
 
     //MÉTODO MUITO IMPORTANTE
@@ -153,8 +126,8 @@ public class PlayerService extends MediaSessionService {
         //Aqui acaba o poço
         //-------------------------------------------------------------------------------------------------
 
+        //Aqui começa a brincadeira com notificação
 
-        NotificationManager notificationManager = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
@@ -163,20 +136,23 @@ public class PlayerService extends MediaSessionService {
         }
 
         // Isso controla a notificação da MediaSession
-        asuka = new NotificationCompat.Builder(this, String.valueOf(R.string.app_name))
-                .addAction(R.drawable.ic_action_previous,"Voltar",pendingPreviousIntent)
-                .addAction(R.drawable.ic_action_pause,"Pause",pendingPauseIntent)
-                .addAction(R.drawable.ic_action_next,"Pular",pendingNextIntent)
-                .setColor(rgb(0, 0, 0))
-                .setColorized(true)
+        asuka = new NotificationCompat.Builder(this, String.valueOf(R.string.app_name));
+                asuka.addAction(R.drawable.ic_notif_back, "Voltar", pendingPreviousIntent);
+        if (exoplay.isPlaying()) {
+            asuka.addAction(R.drawable.ic_notif_pause, "Pause", pendingPauseIntent);
+        } else if (!exoplay.isPlaying()){
+            asuka.addAction(R.drawable.ic_notif_play, "Play", pendingPlayIntent);
+        }
+        asuka.addAction(R.drawable.ic_notif_next, "Pular", pendingNextIntent);
+        asuka.setColor(rgb(0, 0, 0))
+                .setStyle(new MediaStyleNotificationHelper.DecoratedMediaCustomViewStyle(mediaSession).setShowActionsInCompactView(0,1,2).setShowCancelButton(true).setCancelButtonIntent(pendingDeleteIntent))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setChannelId(channelId)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_noivern_notif)
                 .setDeleteIntent(pendingDeleteIntent)
-                .setStyle(new MediaStyleNotificationHelper.DecoratedMediaCustomViewStyle(session)
-                        .setShowActionsInCompactView(0,1,2));
-
-
+                .setColorized(true);
 
         if (notificationManager != null) {
             notificationManager.notify(notifId, asuka.build());
@@ -184,30 +160,7 @@ public class PlayerService extends MediaSessionService {
 
     }
 
-    public void updateNotificationPlaybackState() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
-
-        builder.addAction(R.drawable.ic_action_previous, "Voltar", pendingPreviousIntent);
-        if (exoplay.isPlaying()) {
-            builder.addAction(R.drawable.ic_action_pause, "Pause", pendingPauseIntent);
-        } else {
-            builder.addAction(R.drawable.ic_action_play, "Play", pendingPlayIntent);
-        }
-        builder.addAction(R.drawable.ic_action_next, "Pular", pendingNextIntent);
-        builder.setColor(rgb(0, 0, 0))
-                .setColorized(true)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSmallIcon(R.drawable.ic_noivern_notif)
-                .setDeleteIntent(pendingDeleteIntent)
-                .setStyle(new MediaStyleNotificationHelper.DecoratedMediaCustomViewStyle(mediaSession)
-                        .setShowActionsInCompactView(0,1,2));
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(notifId, builder.build());
-    }
-
-
+    //Definição das ações dos intents
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         String action = intent.getAction();
@@ -242,41 +195,35 @@ public class PlayerService extends MediaSessionService {
         }
         else if(ACTION_STOP.equals(action))
         {
+            notificationManager.cancel(notifId);
             stopForeground(true);
             if (exoplay.isPlaying()) exoplay.stop();
-            exoplay.release();
-            exoplay = null;
-            mediaSession.release();
-            mediaSession = null;
-            Boomburst.is_playing = false;
         }
         return super.onStartCommand(intent, flags, startId);
     }
 
 
-
-
+    //Quando o usuário remove o app dos apps recentes isso daqui acontece pra liberar o player
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+
+        notificationManager.cancel(notifId);
         stopForeground(true);
-        //playerNotif.setPlayer(null);
-        //playerNotif = null;
         if (exoplay.isPlaying()) exoplay.stop();
         exoplay.release();
         exoplay = null;
         mediaSession.release();
         mediaSession = null;
         Boomburst.is_playing = false;
+        Boomburst.atual = -1;
         super.onTaskRemoved(rootIntent);
     }
 
-
+    //Destruição do serviço causa isso daqui
     @Override
     public void onDestroy()
     {
         stopForeground(true);
-        //playerNotif.setPlayer(null);
-        //playerNotif = null;
         if (exoplay.isPlaying()) exoplay.stop();
         exoplay.release();
         exoplay = null;
@@ -290,28 +237,6 @@ public class PlayerService extends MediaSessionService {
     public MediaSession onGetSession(MediaSession.ControllerInfo controllerInfo) {
         return mediaSession;
     }
-
-    private final PlayerNotificationManager.NotificationListener notifListener = new PlayerNotificationManager.NotificationListener() {
-        @Override
-        public void onNotificationCancelled(int notificationId, boolean dismissedByUser) {
-            PlayerNotificationManager.NotificationListener.super.onNotificationCancelled(notificationId, dismissedByUser);
-            stopForeground(true);
-            if (exoplay.isPlaying()) {
-                exoplay.stop();
-                exoplay.release();
-                Boomburst.is_playing = false;
-            }
-        }
-
-        @Override
-        public void onNotificationPosted(int notificationId, Notification notification, boolean ongoing) {
-            PlayerNotificationManager.NotificationListener.super.onNotificationPosted(notificationId, notification, ongoing);
-            startForeground(notificationId,notification);
-        }
-    };
-
-
-
 }
 
 

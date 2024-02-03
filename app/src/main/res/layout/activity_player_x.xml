@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/fotinha"
+        android:background="@color/black"
         android:id="@+id/player_exo"
         />
 
