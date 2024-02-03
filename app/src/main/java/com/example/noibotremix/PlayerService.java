@@ -206,14 +206,7 @@ public class PlayerService extends MediaSessionService {
     //Quando o usuário remove o app dos apps recentes isso daqui acontece pra liberar o player
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-
-        notificationManager.cancel(notifId);
-        stopForeground(true);
         if (exoplay.isPlaying()) exoplay.stop();
-        exoplay.release();
-        exoplay = null;
-        mediaSession.release();
-        mediaSession = null;
         Boomburst.is_playing = false;
         Boomburst.atual = -1;
         super.onTaskRemoved(rootIntent);
