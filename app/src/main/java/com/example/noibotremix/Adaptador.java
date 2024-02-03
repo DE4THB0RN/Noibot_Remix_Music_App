@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.media3.common.MediaItem;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
 
     ArrayList<AudioModel> songlist;
     Context context;
+
 
     public Adaptador(ArrayList<AudioModel> songlist, Context context) {
         this.songlist = songlist;
@@ -56,13 +58,13 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolder> {
 
                if(Boomburst.atual != position)
                {
-                    Boomburst.atual= position;
-                    intent.putExtra("VALOR",0);
+                   Boomburst.atual= position;
+                   intent.putExtra("VALOR",0);
 
                }
                else
                {
-                    intent.putExtra("VALOR",1);
+                   intent.putExtra("VALOR",1);
 
                }
 

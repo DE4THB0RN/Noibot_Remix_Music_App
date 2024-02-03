@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         //se tem coisa
         else {
             Collections.sort(listinha, (a, b) -> a.getNome().compareToIgnoreCase(b.nome));
-
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(new Adaptador(listinha,getApplicationContext()));
 

@@ -53,51 +53,63 @@ public class Player_x extends AppCompatActivity
     public void onStart() {
         super.onStart();
         //Session token abre a sessão do player
-        SessionToken sessionToken =
-                new SessionToken(this, new ComponentName(this, PlayerService.class));
-        controllerFuture =
-                new MediaController.Builder(this, sessionToken).buildAsync();
-        controllerFuture.addListener(() -> {
-            // Controller serve literalmente pra isso
-            //Ele controla a música
-            try {
-                playerView.setPlayer(controllerFuture.get());
 
-                playerView.getPlayer().addMediaItems(pegarMusicas());
-                musiquinha();
-                playerView.getPlayer().addListener(new Player.Listener() {
+            SessionToken sessionToken =
+                    new SessionToken(this, new ComponentName(this, PlayerService.class));
+            controllerFuture =
+                    new MediaController.Builder(this, sessionToken).buildAsync();
+
+            controllerFuture.addListener(() -> {
+                // Controller serve literalmente pra isso
+                //Ele controla a música
+                try {
+
+                    playerView.setPlayer(controllerFuture.get());
+                    if(!Boomburst.is_playing)
+                    {
+                        playerView.getPlayer().addMediaItems(pegarMusicas());
+                        Boomburst.is_playing = true;
+                        musiquinha();
+                    }
+                    else if(Boomburst.is_playing && playerView.getPlayer().getCurrentMediaItemIndex() != Boomburst.atual){
+                        musiquinha();
+                    }
+                    else{
+                        telinha();
+                    }
+
+                    playerView.getPlayer().addListener(new Player.Listener() {
                     @Override
                     public void onEvents(Player player, Player.Events events) {
-                        Player.Listener.super.onEvents(player, events);
-                        if(events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION)){
-                            Boomburst.atual = player.getCurrentMediaItemIndex();
-                            titulo.setText(Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.title);
+                            Player.Listener.super.onEvents(player, events);
+                            if(events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION)){
+                                Boomburst.atual = player.getCurrentMediaItemIndex();
+                                titulo.setText(Objects.requireNonNull(player.getCurrentMediaItem()).mediaMetadata.title);
+                            }
                         }
-                    }
-                });
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
+                    });
+                } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        }, MoreExecutors.directExecutor());
+            }, MoreExecutors.directExecutor());
+
     }
 
     private void musiquinha()
     {
-        if(valor != 1) {
-            playerView.getPlayer().seekTo(Boomburst.atual,0);
-            playerView.getPlayer().prepare();
-            playerView.getPlayer().setPlayWhenReady(true);
-        }
+        playerView.getPlayer().seekTo(Boomburst.atual,0);
+        playerView.getPlayer().prepare();
+        playerView.getPlayer().setPlayWhenReady(true);
+        telinha();
+    }
+
+    private void telinha(){
+
         titulo.setText(Objects.requireNonNull(playerView.getPlayer().getCurrentMediaItem()).mediaMetadata.title);
+
     }
 
-    @Override
-    protected void onPause() {
 
-        super.onPause();
-    }
 
     //Pega todas as músicas da lista que foi jogada aqui
     //Não sei se vai funcionar 100% sabe
