@@ -137,7 +137,7 @@ public class PlayerService extends MediaSessionService {
 
         // Isso controla a notificação da MediaSession
         asuka = new NotificationCompat.Builder(this, String.valueOf(R.string.app_name));
-                asuka.addAction(R.drawable.ic_notif_back, "Voltar", pendingPreviousIntent);
+        asuka.addAction(R.drawable.ic_notif_back, "Voltar", pendingPreviousIntent);
         if (exoplay.isPlaying()) {
             asuka.addAction(R.drawable.ic_notif_pause, "Pause", pendingPauseIntent);
         } else if (!exoplay.isPlaying()){
