@@ -207,6 +207,7 @@ public class PlayerService extends MediaSessionService {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         if (exoplay.isPlaying()) exoplay.stop();
+        stopForeground(true);
         Boomburst.is_playing = false;
         Boomburst.atual = -1;
         super.onTaskRemoved(rootIntent);
