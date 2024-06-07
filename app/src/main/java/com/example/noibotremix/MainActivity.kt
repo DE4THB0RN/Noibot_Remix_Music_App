@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerview)
         songless = findViewById(R.id.nosongs)
         //O if que usa os dois mais abaixo NÃO MODIFICAR
-        if (!permissao() && Build.VERSION.SDK_INT ==  Build.VERSION_CODES.TIRAMISU) {
+        if (!permissao()) {
             permitir()
         }
         //Os abaixo servem pra pegar nome,dados e duração das músicas e puxar elas pro app(se forem musicas)
@@ -78,10 +78,10 @@ class MainActivity : AppCompatActivity() {
         else{
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.READ_MEDIA_AUDIO), 123)
         }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this@MainActivity, Manifest.permission.POST_NOTIFICATIONS)) {
             Toast.makeText(this@MainActivity, "Preciso da permissão pra funcionar sabe,ativa ela lá", Toast.LENGTH_SHORT).show()
         } else {
-            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 123)
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 123)
         }
     }
 
