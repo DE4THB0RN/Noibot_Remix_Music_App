@@ -2,8 +2,6 @@ package com.example.noibot_remix_z
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -48,15 +46,6 @@ fun NoibotAppBar(){
     )
 }
 
-//@Composable
-//fun NoibotBottomBar(){
-//    if(Boomburst.is_playing){
-//        BottomAppBar(modifier = Modifier.wrapContentSize()){
-//            PlayerItem(backgroundcolor = primaryContainerDark, showSongName = true, showProgress = true)
-//        }
-//    }
-//}
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,28 +55,12 @@ fun NoibotApp(
     modifier: Modifier = Modifier,
     navhostController: NavHostController = rememberNavController()
 ) {
-//    val backsStackEntry = navhostController.currentBackStackEntryAsState()
-
-//    val currentScreen = Telas.valueOf(
-//        backsStackEntry.value?.destination?.route ?: Telas.Songs.name
-//    )
 
     Scaffold (
         topBar = {
             NoibotAppBar()
         },
 
-//                    bottomBar = {
-//                        BottomAppBar(
-//                            containerColor = primaryContainerDark,
-//                            modifier = Modifier.height(56.dp),
-//                            contentColor = primaryDark,
-//                            tonalElevation = TODO(),
-//                            contentPadding = TODO(),
-//                            windowInsets = TODO(),
-//                            content = TODO()
-//                        )
-//                    }
     ) { innerPadding ->
         NavHost(
             navController = navhostController,

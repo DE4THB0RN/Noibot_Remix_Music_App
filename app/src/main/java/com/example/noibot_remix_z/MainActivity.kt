@@ -17,9 +17,9 @@ import androidx.core.content.ContextCompat
 import com.example.noibot_remix_z.audio.AudioModel
 import com.example.noibot_remix_z.audio.PlaterContent
 import com.example.noibot_remix_z.ui.theme.NoibotTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
