@@ -13,7 +13,7 @@ import com.example.noibot_remix_z.NotificationUtils
 class PlayerService : MediaSessionService() {
 
     //Definição da MediaSession,Player e NotificationCompat.Builder
-    var mediaSession: MediaSession? = null
+    private var mediaSession: MediaSession? = null
     private var exoplay: ExoPlayer? = null
 
 

@@ -12,13 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.noibot_remix_z.R
 import com.example.noibot_remix_z.ui.components.PlayerItem
 import com.example.noibot_remix_z.ui.theme.primaryContainerDark
 
 @Composable
 fun PlayerScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
 
     Column (modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Bottom) {
@@ -39,5 +42,5 @@ fun PlayerScreen(
 @Preview(name = "PlayerScreen")
 @Composable
 private fun PreviewPlayerScreen() {
-    PlayerScreen()
+    PlayerScreen(navController = rememberNavController())
 }

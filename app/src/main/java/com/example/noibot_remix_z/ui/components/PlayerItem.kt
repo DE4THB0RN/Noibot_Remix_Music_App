@@ -1,6 +1,6 @@
 package com.example.noibot_remix_z.ui.components
 
-import androidx.compose.runtime.getValue
+import com.example.noibot_remix_z.viewmodels.MusicPlayerViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,57 +19,59 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.noibot_remix_z.viewmodels.PlayerViewModel
+import androidx.media3.common.MediaItem
 import com.example.noibot_remix_z.R
 import com.example.noibot_remix_z.ui.theme.primaryDark
-import ir.mahozad.multiplatform.wavyslider.material3.WavySlider
 
 @Composable
 fun PlayerItem(
+    modifier: Modifier = Modifier,
     backgroundcolor : Color,
     showSongName : Boolean = true,
     showProgress : Boolean = true,
-    viewModel: PlayerViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    viewModel: MusicPlayerViewModel = viewModel(),
+
 ) {
 
     LaunchedEffect(Unit) {
 
     }
 
-    val isPlaying : Boolean = viewModel.isPlaying.observeAsState().value == true
-    val loopState : Int = viewModel.loopState.observeAsState(0).value
-    val shuffleState : Boolean = viewModel.shuffleState.observeAsState(false).value
-    var playbackState : Int = viewModel.playbackState.observeAsState(0).value
-    val songName : String = viewModel.songName.observeAsState("").value
+
+
+    val isPlaying : State<Boolean> = viewModel.isPlaying.collectAsState(initial = true)
+    val loopState : State<Int> = viewModel.loopState.collectAsState()
+    val shuffleState : State<Boolean> = viewModel.shuffleModeEnabled.collectAsState()
+    val playbackState : State<Int> = viewModel.playbackState.collectAsState(initial = 0)
+    val songName : State<MediaItem?> = viewModel.currentPlayingMediaItem.collectAsState()
 //    val songLength : Long = viewModel.songLength.observeAsState(0L).value
 //    val songPosition : Long = viewModel.songPosition.observeAsState(0L).value
 //    val barProgress : Float = (songPosition.toFloat() / songLength.toFloat()) * 100
 
     val pauseplayButton =
-        if(isPlaying)
+        if(isPlaying.value)
             R.drawable.baseline_pause_circle_filled_24
         else
             R.drawable.baseline_play_circle_filled_24
 
     val shuffleButton =
-        if(shuffleState)
+        if(shuffleState.value)
             R.drawable.baseline_shuffle_on_24
         else
             R.drawable.baseline_no_shuffle_24
 
-    val loopButton = when(loopState){
+    val loopButton = when(loopState.value){
         0 -> R.drawable.baseline_no_repeat_24
         1 -> R.drawable.baseline_repeat_24
         2 -> R.drawable.baseline_repeat_one_24
@@ -94,7 +96,7 @@ fun PlayerItem(
             if(showSongName) {
                 //Nome da musica
                 Text(
-                    text = songName,
+                    text = songName.value?.mediaMetadata?.title.toString(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize,
@@ -119,7 +121,7 @@ fun PlayerItem(
             ) {
                 //Botão de loop
                 Button(
-                    onClick = { viewModel.toggleLoop()},
+                    onClick = { viewModel.toggleLoopState()},
                     modifier.wrapContentSize(),
                     enabled = true,
                     colors = ButtonDefaults.buttonColors(
@@ -139,7 +141,7 @@ fun PlayerItem(
 
                 //Botão de voltar
                 Button(
-                    onClick = { viewModel.previousItem()},
+                    onClick = { viewModel.skipToPrevious()},
                     modifier.wrapContentSize(),
                     enabled = true,
                     colors = ButtonDefaults.buttonColors(
@@ -159,7 +161,7 @@ fun PlayerItem(
 
                 //Botão de Pause/Play
                 Button(
-                    onClick = { viewModel.togglePlay()},
+                    onClick = { viewModel.togglePlayPause()},
                     modifier.wrapContentSize(),
                     enabled = true,
                     colors = ButtonDefaults.buttonColors(
@@ -179,7 +181,7 @@ fun PlayerItem(
 
                 //Botão de vai pra frente
                 Button(
-                    onClick = { viewModel.nextItem()},
+                    onClick = { viewModel.skipToNext()},
                     modifier.wrapContentSize(),
                     enabled = true,
                     colors = ButtonDefaults.buttonColors(
@@ -199,7 +201,7 @@ fun PlayerItem(
 
                 //Botão de shuffle
                 Button(
-                    onClick = { viewModel.shuffleSongs()},
+                    onClick = { viewModel.toggleShuffleMode()},
                     modifier.wrapContentSize(),
                     enabled = true,
                     colors = ButtonDefaults.buttonColors(

@@ -10,58 +10,51 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.noibot_remix_z.audio.AudioModel
-import com.example.noibot_remix_z.audio.PlaterContent
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.noibot_remix_z.audio.fontes.AudioModel
+import com.example.noibot_remix_z.ui.components.NoibotAppBar
+import com.example.noibot_remix_z.ui.screens.PlayerScreen
+import com.example.noibot_remix_z.ui.screens.SongsScreen
 import com.example.noibot_remix_z.ui.theme.NoibotTheme
+import com.example.noibot_remix_z.ui.theme.primaryContainerDark
+import com.example.noibot_remix_z.ui.theme.primaryDark
+import com.example.noibot_remix_z.ui.theme.secondaryDark
 import dagger.hilt.android.AndroidEntryPoint
+
+enum class Telas{
+    Songs,
+    Player
+}
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         if(!permissao() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             permitir()
         }
 
-        var listinha: ArrayList<AudioModel> = ArrayList()
-        //Os abaixo servem pra pegar nome,dados e duração das músicas e puxar elas pro app(se forem musicas)
-        val info = arrayOf(
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.DATA
-        )
-        val selecionar = (MediaStore.Audio.Media.IS_MUSIC + " != 0 AND "
-                + MediaStore.Audio.Media.DATA + " LIKE '%/Music/%'")
-        var dados: AudioModel
-        val cursor =  contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, info, selecionar, null, null)
-        while (cursor != null && cursor.moveToNext()) {
-            dados = AudioModel(cursor.getString(1), cursor.getString(0))
-
-            listinha.add(dados)
-        }
-
-        cursor?.close()
-
-        if (listinha.isNotEmpty()){
-            listinha.sortWith{
-                    a: AudioModel,
-                    b : AudioModel ->
-                a.nome.compareTo(b.nome, ignoreCase = true
-                )
-            }
-        }
-
-        PlaterContent.pegarMusicas(this,listinha)
-
         enableEdgeToEdge()
         setContent {
             NoibotTheme {
-                NoibotApp(listinha)
+                NoibotApp()
             }
         }
     }
@@ -88,6 +81,33 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 123)
         }
     }
+
+    @Composable
+    private fun MainUI(modifier : Modifier = Modifier){
+        val navController = rememberNavController()
+
+        Scaffold(
+            topBar = {
+                NoibotAppBar()
+            }
+        ) {
+                innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = Telas.Songs.name,
+                modifier = modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+            ){
+                composable(route = Telas.Songs.name){
+                    SongsScreen(navController = navController)
+                }
+                composable(route = Telas.Player.name){
+                    PlayerScreen(navController = navController)
+                }
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -95,6 +115,6 @@ class MainActivity : ComponentActivity() {
 fun GreetingPreview() {
 
     NoibotTheme {
-        NoibotApp(listOf())
+        NoibotApp()
     }
 }

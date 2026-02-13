@@ -23,7 +23,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Noibot Re:Mix Z"
             android:theme="@style/Theme.Noibot_Remix_Z">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,8 +32,8 @@
         </activity>
 
         <service
-            android:name=".audio.PlayerService"
-            android:exported="true"
+            android:name=".audio.MusicService"
+            android:exported="false"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaSessionService" />

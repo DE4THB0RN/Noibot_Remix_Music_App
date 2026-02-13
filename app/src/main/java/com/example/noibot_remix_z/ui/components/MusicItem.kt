@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,8 +35,8 @@ fun MusicItem(
     val noib1 = painterResource(id = R.drawable.noibat_b)
     val noib2 = painterResource(id = R.drawable.noibat_shiny_b)
 
-    var noibatIcon = if(id == Boomburst.atual) noib2 else noib1
-    var textColor = if(id == Boomburst.atual) errorContainerDark else MaterialTheme.typography.bodyMedium.color
+    val noibatIcon = if(id == Boomburst.atual) noib2 else noib1
+    val textColor = if(id == Boomburst.atual) errorContainerDark else MaterialTheme.typography.bodyMedium.color
 
     Row (modifier.fillMaxWidth()) {
         Card(

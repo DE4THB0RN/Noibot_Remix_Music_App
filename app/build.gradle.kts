@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,35 +62,35 @@ dependencies {
 
     val media3_version = "1.4.1"
 
-    implementation("androidx.media3:media3-session:1.4.1")
+    implementation("androidx.media3:media3-session:1.9.0")
     implementation("androidx.media3:media3-common:1.4.1")
-    implementation("androidx.media3:media3-container:1.4.1")
-    implementation("androidx.media3:media3-database:1.4.1")
-    implementation("androidx.media3:media3-datasource:1.4.1")
-    implementation("androidx.media3:media3-decoder:1.4.1")
-    implementation("androidx.media3:media3-exoplayer:1.4.1")
-    implementation("androidx.media3:media3-extractor:1.4.1")
-    implementation("androidx.media3:media3-ui:1.4.1")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.5")
+    implementation("androidx.media3:media3-container:1.9.0")
+    implementation("androidx.media3:media3-database:1.9.0")
+    implementation("androidx.media3:media3-datasource:1.9.0")
+    implementation("androidx.media3:media3-decoder:1.9.0")
+    implementation("androidx.media3:media3-exoplayer:1.9.0")
+    implementation("androidx.media3:media3-extractor:1.9.0")
+    implementation("androidx.media3:media3-ui:1.9.0")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.10.1")
 
 
-    implementation("com.google.dagger:hilt-android:2.54")
-    kapt("com.google.dagger:hilt-android-compiler:2.54")
+    implementation("com.google.dagger:hilt-android:2.59")
+    kapt("com.google.dagger:hilt-android-compiler:2.59")
 
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.54")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.54")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.59")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.59")
 
-    testImplementation("com.google.dagger:hilt-android-testing:2.54")
-    kaptTest("com.google.dagger:hilt-android-compiler:2.54")
+    testImplementation("com.google.dagger:hilt-android-testing:2.59")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.59")
 
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    implementation("androidx.navigation:navigation-compose:2.8.4")
-    implementation("androidx.navigation:navigation-runtime:2.8.4")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
-    implementation("ir.mahozad.multiplatform:wavy-slider:2.0.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+    implementation("androidx.navigation:navigation-compose:2.9.6")
+    implementation("androidx.navigation:navigation-runtime:2.9.6")
+    implementation("androidx.compose.runtime:runtime-livedata:1.10.1")
+    implementation("ir.mahozad.multiplatform:wavy-slider:2.2.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
 
 
 }

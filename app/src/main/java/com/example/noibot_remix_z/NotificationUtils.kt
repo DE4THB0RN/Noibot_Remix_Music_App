@@ -7,7 +7,7 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 
 object NotificationUtils {
-    private const val CHANNEL_ID : String = "Noibot Remix".toString() + " Music Channel"
+    private const val CHANNEL_ID : String = "Noibot Remix" + " Music Channel"
     private const val CHANNEL_NAME : String = "Boomburst"
     private const val NOTIF_ID : Int = 1111112
     private var notificationManager : NotificationManager? = null
